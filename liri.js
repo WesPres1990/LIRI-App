@@ -34,14 +34,14 @@ switch (process.argv[2]){
     //Need to find way to get process.argv[3]
     spotify.request('https//:api.spotify.com/v1/tracks/0hrBpAOgrt8RXigk83LLNE')
     .then(function (data) {
-        spotObj = {
+        spotSelection = {
             artists: data.artists[0].name,
             songName: data.name,
             songLink: data.preview_url,
             album: data.album.name
         }
-        for (var i in spotObj) {
-            console.log(spotObj[i]);
+        for (var i in spotSelection) {
+            console.log(spotSelection[i]);
         }
     })
     .catch(function (err) {
