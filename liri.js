@@ -14,43 +14,65 @@ switch (process.argv[2]){
     
     case 'my_tweets':
     
-    var params = {
-        screen_name: 'comradehutch', 
-        count: 20
-    };
-    client.get('statuses/user_timeline', params, function(error, tweets, response) {
-      if (!error) {
+    client.get('statuses/user_timeline', {screen_name: 'comradehutch', count: 20}, function(error, tweets, response) {
+        if (!error) {
           var counter = 1;
           for(var i = 0; i < tweets.length; i++){
             var element = tweets[i];
-            var twitterText = counter++ + '. ' + element.text + '\n'
-            console.log(twitterText);
-          }
+            var text = counter++ + '. ' + element.text + '\n'
+            console.log(text);
+        }
       }
     });
     break;
 
     case 'spotify_this_song':
-    //Need to find way to get process.argv[3]
-    spotify.request('https//:api.spotify.com/v1/tracks/0hrBpAOgrt8RXigk83LLNE')
-    .then(function (data) {
-        spotSelection = {
-            artists: data.artists[0].name,
-            songName: data.name,
-            songLink: data.preview_url,
-            album: data.album.name
+
+    var arg = process.argv[3]
+
+    spotify.search({ type: 'track', query: arg, limit: 1 }, function(err, data) {
+        if (err) {
+          return console.log('Error occurred: ' + err);
         }
-        for (var i in spotSelection) {
-            console.log(spotSelection[i]);
+
+        var songsArray = data.tracks.items;
+        var songSelection = {};
+        for (var i = 0; i < songsArray.length; i++) {
+            var element = songsArray[i],
+            songSelection = {
+                    songArtist: "Artist: " + element.artists[0].name + '\n',
+                    songName: "Song Name: " + element.name + '\n',
+                    songPreview: "Preview URL: " + element.preview_url + '\n',
+                    songAlbum: "Album Name: " + element.album.name
+                }
+            for (var i in songSelection) {
+                console.log(songSelection[i]);
+            }
         }
-    })
-    .catch(function (err) {
-        console.error('Error occurred: ' + err);
-    });
-    return;
+      //console.log(JSON.stringify (data.tracks.items[0], null, 1)); 
+      });
+    // spotify.request('https://api.spotify.com/v1/tracks/0hrBpAOgrt8RXigk83LLNE')
+    // .then(function (data) {
+    //     songSelection = {
+    //         songArtist: data.artists[0].name,
+    //         songName: data.name,
+    //         songPreview: data.preview_url,
+    //         songAlbum: data.album.name
+    //     }
+    //     for (var i in songSelection) {
+    //         console.log(songSelection[i]);
+    //     }
+    // })
+    // .catch(function (err) {
+    //     console.error('Error occurred: ' + err);
+    // });
+    // return;
     break;
 
     case 'movie_this':
+    
+    var arg = process.argv[3]
+
     requestCall.get('http://www.omdbapi.com/?apikey=trilogy&t=' + editInput, function (error, response, body) {
         
                 var parsedVar = JSON.parse(body);
@@ -60,7 +82,7 @@ switch (process.argv[2]){
                     return
                 }
         
-                var movieObj = {
+                var movieSelection = {
                     movieTitle: 'Title: ' + parsedVar.Title,
                     movieYear: 'Year: ' + parsedVar.Year,
                     movieIMDBRating: 'IMDB Rating: ' + parsedVar.imdbRating,
@@ -71,8 +93,8 @@ switch (process.argv[2]){
                     movieActors: 'Actors: ' + parsedVar.Actors
                 }
         
-                for (var i in movieObj) {
-                    console.log(movieObj[i]);
+                for (var i in movieSelection) {
+                    console.log(movieSelection[i]);
                 }
             });
 
@@ -114,8 +136,8 @@ switch (process.argv[2]){
 
 
 if(process.argv[2] === 'spotify_this_song'){
-    outputNum = process.argv[3];
-    console.log(outputNum);
+    output = process.argv[3];
+    console.log(output);
 }
 else {
     console.log("error");
