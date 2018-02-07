@@ -15,15 +15,19 @@ switch (process.argv[2]){
     case 'my_tweets':
     
     client.get('statuses/user_timeline', {screen_name: 'comradehutch', count: 20}, function(error, tweets, response) {
-        if (!error) {
-          var counter = 1;
-          for(var i = 0; i < tweets.length; i++){
-            var element = tweets[i];
-            var text = counter++ + '. ' + element.text + '\n'
-            console.log(text);
+        if (error) {
+            console.log("Error");
+        }
+        else{
+            var counter = 1;
+            for(var i = 0; i < tweets.length; i++){
+              var element = tweets[i];
+              var text = counter++ + '. ' + element.text + '\n'
+              console.log(text);
         }
       }
     });
+    return;
     break;
 
     case 'spotify_this_song':
@@ -34,71 +38,85 @@ switch (process.argv[2]){
         if (err) {
           return console.log('Error occurred: ' + err);
         }
-
-        var songsArray = data.tracks.items;
-        var songSelection = {};
-        for (var i = 0; i < songsArray.length; i++) {
-            var element = songsArray[i],
-            songSelection = {
-                    songArtist: "Artist: " + element.artists[0].name + '\n',
-                    songName: "Song Name: " + element.name + '\n',
-                    songPreview: "Preview URL: " + element.preview_url + '\n',
-                    songAlbum: "Album Name: " + element.album.name
+        else{
+            var songsArray = data.tracks.items;
+            var songSelection = {};
+            for (var i = 0; i < songsArray.length; i++) {
+                var element = songsArray[i],
+                songSelection = {
+                        songArtist: "Artist: " + element.artists[0].name + '\n',
+                        songName: "Song Name: " + element.name + '\n',
+                        songPreview: "Preview URL: " + element.preview_url + '\n',
+                        songAlbum: "Album Name: " + element.album.name
+                    }
+                for (var i in songSelection) {
+                    console.log(songSelection[i]);
                 }
-            for (var i in songSelection) {
-                console.log(songSelection[i]);
             }
         }
       //console.log(JSON.stringify (data.tracks.items[0], null, 1)); 
       });
-    // spotify.request('https://api.spotify.com/v1/tracks/0hrBpAOgrt8RXigk83LLNE')
-    // .then(function (data) {
-    //     songSelection = {
-    //         songArtist: data.artists[0].name,
-    //         songName: data.name,
-    //         songPreview: data.preview_url,
-    //         songAlbum: data.album.name
-    //     }
-    //     for (var i in songSelection) {
-    //         console.log(songSelection[i]);
-    //     }
-    // })
-    // .catch(function (err) {
-    //     console.error('Error occurred: ' + err);
-    // });
-    // return;
+    return;
     break;
 
     case 'movie_this':
-    
+
     var arg = process.argv[3]
 
-    requestCall.get('http://www.omdbapi.com/?apikey=trilogy&t=' + editInput, function (error, response, body) {
-        
-                var parsedVar = JSON.parse(body);
-        
-                if (parsedVar.Response === 'False') {
-                    console.log("Movie N/A")
-                    return
-                }
-        
-                var movieSelection = {
-                    movieTitle: 'Title: ' + parsedVar.Title,
-                    movieYear: 'Year: ' + parsedVar.Year,
-                    movieIMDBRating: 'IMDB Rating: ' + parsedVar.imdbRating,
-                    movieRTRatings: 'Rotten Tomatoes Rating: ' + parsedVar.Ratings[1].Value,
-                    movieCountry: 'Country: ' + parsedVar.Country,
-                    movieLanguage: 'Language: ' + parsedVar.Language,
-                    moviePlot: 'Plot: ' + parsedVar.Plot,
-                    movieActors: 'Actors: ' + parsedVar.Actors
-                }
-        
-                for (var i in movieSelection) {
-                    console.log(movieSelection[i]);
-                }
-            });
+    // request('http://www.omdbapi.com/?apikey=trilogy&t=Mr.+Nobody', function(error, response, body){
+    //     if (error) {
+    //       console.log("Error");
+    //     }
+    //     else if(response.statusCode === 200) {
+    //         console.log("");
+    //         console.log("Title: " + JSON.parse(body).Title);
+    //         console.log("");
+    //         console.log("Year: " + JSON.parse(body).Year);
+    //         console.log("");
+    //         console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
+    //         console.log("");
+    //         console.log("Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value);
+    //         console.log("");
+    //         console.log("Country: " + JSON.parse(body).Country);
+    //         console.log("");
+    //         console.log("Language: " + JSON.parse(body).Language);
+    //         console.log("");
+    //         console.log("Plot: " + JSON.parse(body).Plot);
+    //         console.log("");
+    //         console.log("Actors: " + JSON.parse(body).Actors); 
+    //     }
+    //   }
+    // );
+    // return;
 
-            //Need to add Mr. Nobody for if user does not enter a film
+    var userInput = arg;
+    var movieName = userInput;
+
+    request('http://www.omdbapi.com/?apikey=trilogy&t=' + movieName, function(error, response, body){
+        if (error) {
+          console.log("Error");
+        }
+        else if(response.statusCode === 200) {
+            console.log("");
+            console.log("Title: " + JSON.parse(body).Title);
+            console.log("");
+            console.log("Year: " + JSON.parse(body).Year);
+            console.log("");
+            console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
+            console.log("");
+            console.log("Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value);
+            console.log("");
+            console.log("Country: " + JSON.parse(body).Country);
+            console.log("");
+            console.log("Language: " + JSON.parse(body).Language);
+            console.log("");
+            console.log("Plot: " + JSON.parse(body).Plot);
+            console.log("");
+            console.log("Actors: " + JSON.parse(body).Actors); 
+        }
+      }
+    );
+    return;
     break;
 
     case 'do_what_it_says':
@@ -135,10 +153,10 @@ switch (process.argv[2]){
 
 
 
-if(process.argv[2] === 'spotify_this_song'){
-    output = process.argv[3];
-    console.log(output);
-}
-else {
-    console.log("error");
-}
+// if(process.argv[2] === 'spotify_this_song'){
+//     output = process.argv[3];
+//     console.log(output);
+// }
+// else {
+//     console.log("error");
+// }
