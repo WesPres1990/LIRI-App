@@ -16,7 +16,7 @@ switch (process.argv[2]){
     
     case 'my_tweets':
     
-    client.get('statuses/user_timeline', {screen_name: 'comradehutch', count: 20}, function(error, tweets, response) {
+    client.get('statuses/user_timeline', {screen_name: 'TitanicBelfast', count: 20}, function(error, tweets, response) {
         if (error) {
             console.log("Error");
         }
@@ -130,7 +130,7 @@ switch (process.argv[2]){
             
             case 'my_tweets':
             
-            client.get('statuses/user_timeline', {screen_name: 'comradehutch', count: 20}, function(error, tweets, response) {
+            client.get('statuses/user_timeline', {screen_name: 'TitanicBelfast', count: 20}, function(error, tweets, response) {
                 if (error) {
                     console.log("Error");
                 }
